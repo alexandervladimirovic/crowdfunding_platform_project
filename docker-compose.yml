@@ -10,9 +10,6 @@ services:
     depends_on:
       - redis
       - db
-    environment:
-      - DATABASE_URL=postgres://crowdfunding_user:crowdfunding_password@db:5432/crowdfunding_db
-      - CELERY_BROKER_URL=redis://redis:6379/0
     
   db:
     image: postgres:13-alpine

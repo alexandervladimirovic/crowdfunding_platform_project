@@ -1,6 +1,7 @@
 from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 
+from users.permissions import IsAdminOrCreator, IsDonor
 from .models import Project, Donation
 from .serializers import ProjectSerializer, DonationSerializer
 
@@ -10,9 +11,11 @@ class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
 
     def get_permissions(self):
+        
         if self.request.method == 'POST':
-            return [AllowAny()]
-        return [IsAuthenticated()]
+            return [IsAdminOrCreator()]
+        
+        return [AllowAny()]
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
@@ -21,6 +24,6 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
 class DonationList(generics.ListCreateAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsDonor]
 
 

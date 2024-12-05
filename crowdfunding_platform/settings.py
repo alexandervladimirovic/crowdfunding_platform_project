@@ -25,9 +25,12 @@ INSTALLED_APPS = [
 
     # INSTALL APPS
     'rest_framework',
+    'drf_yasg',
+    'django_celery_beat',
 
     # MY APPS
     'crowdfunding.apps.CrowdfundingConfig',
+    'users.apps.UsersConfig',
 ]
 
 
@@ -103,6 +106,8 @@ STATIC_URL = '/static/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 
 # CELERY SETTINGS
