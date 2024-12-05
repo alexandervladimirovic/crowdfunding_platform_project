@@ -3,7 +3,6 @@ from pathlib import Path
 from decouple import config
 
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -72,8 +71,8 @@ DATABASES = {
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
+        'HOST': config('DB_HOST', default='db'),
+        'PORT': config('DB_PORT', default=5432),
     }
 }
 
@@ -108,10 +107,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CELERY SETTINGS
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 
 # REST FRAMEWORK SETTINGS

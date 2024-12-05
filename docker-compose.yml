@@ -1,0 +1,42 @@
+services:
+  
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - redis
+      - db
+    environment:
+      - DATABASE_URL=postgres://crowdfunding_user:crowdfunding_password@db:5432/crowdfunding_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    
+  db:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+  
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    
+  celery:
+    build: .
+    command: celery -A crowdfunding_platform worker -l info
+    depends_on:
+      - redis
+
+volumes:
+  postgres_data:
