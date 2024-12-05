@@ -5,5 +5,9 @@ from django.utils.translation import gettext_lazy as _
 class CrowdfundingConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'crowdfunding'
+    verbose_name = _('crowdfunding')
+
+    def ready(self):
+        import crowdfunding.signals
     
 

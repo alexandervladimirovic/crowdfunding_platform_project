@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.db.models import Sum
 
 MIN_GOAL_AMOUNT = 100000
 MIN_DONATION_AMOUNT = 1000
@@ -47,11 +48,14 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+    def total_donations(self):
+        return self.donations.aggregate(total=Sum('amount'))['total'] or 0
+
     def clean(self):
         if self.goal_amount < MIN_GOAL_AMOUNT:
             raise ValidationError(_("Goal amount must be greater than 100000"))
-        
+ 
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
