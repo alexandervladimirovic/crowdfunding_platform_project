@@ -27,7 +27,16 @@ class Project(models.Model):
         CLOSED = 'closed', _('Closed')
         FAILED = 'failed', _('Failed')
 
+    class CategoryStatus(models.TextChoices):
+
+        ART = 'art', _('Art')
+        TECHNOLOGY = 'technology', _('Technology')
+        EDUCATION = 'education', _('Education')
+        HEALTH = 'health', _('Health')
+
     title = models.CharField(_("title of the project"), max_length=200)
+    slug = models.SlugField(_("slug"), unique=True)
+    category = models.CharField(_("category"), max_length=20, choices=CategoryStatus.choices, default=CategoryStatus.TECHNOLOGY)
     description = models.TextField(_("description of the project"))
     goal_amount = models.DecimalField(_("goal amount"), max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
@@ -77,6 +86,12 @@ class Donation(models.Model):
     
     def __str__(self):
         return f"{self.donor_name} - {self.amount} for {self.project.title}"
+    
+    def remaining_amount(self):
+
+        total_donations = self.donations.aggregate(Sum('amount'))['amount__sum'] or 0
+
+        return self.goal - total_donations
     
     def clean(self):
         if self.amount < MIN_DONATION_AMOUNT:

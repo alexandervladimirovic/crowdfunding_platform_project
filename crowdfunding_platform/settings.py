@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'django_celery_beat',
+    'django_filters',
 
     # MY APPS
     'crowdfunding.apps.CrowdfundingConfig',
